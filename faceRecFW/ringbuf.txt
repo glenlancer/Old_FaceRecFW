@@ -1,0 +1,39 @@
+
+    cv::Mat Sw_w;
+    cv::Mat Sw_w_1_sqrt;
+    cv::Mat Sw_w_mat;
+    cv::Mat Sw_u;
+    cv::Mat Sw_u_t;
+    cv::Mat temp_mat;
+    cv::Mat temp_mat_u;
+
+    cv::SVD Sw_svd(Sw);
+    Sw_w = Sw_svd.w;
+    Sw_u = Sw_svd.u;
+
+    Sw_w_1_sqrt.create(Sw_w.rows, Sw_w.cols, CV_64FC1);
+    for (int i = 0; i < Sw_w.rows; i++) {
+        if (Sw_w.at<double>(i, 0) == 0)
+            Sw_w_1_sqrt.at<double>(i, 0) = 0;
+        else
+            Sw_w_1_sqrt.at<double>(i, 0) = pow(Sw_w.at<double>(i, 0), -0.5);
+    }
+
+    Sw_w_mat.create(Sw.rows, Sw.cols, CV_64FC1);
+    Sw_w_mat.setTo(cv::Scalar(0.0));
+
+    for (int i = 0; i < Sw_w.rows; i++) {
+        Sw_w_mat.at<double>(i, i) = Sw_w_1_sqrt.at<double>(i, 0);
+    }
+
+    cv::transpose(Sw_u, Sw_u_t);
+
+    temp_mat = Sw_w_mat * Sw_u_t * Sb * Sw_u * Sw_w_mat;
+
+    cv::eigen()
+
+    cv::SVD temp_mat_svd(temp_mat);
+    temp_mat_u = temp_mat_svd.u;
+
+    //flda_transfer_matrix = Sw_u_t * temp_mat_u;
+    flda_transfer_matrix = Sw_u * Sw_w_mat * temp_mat_u;

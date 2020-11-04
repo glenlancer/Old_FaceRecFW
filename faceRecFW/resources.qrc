@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/norm_face_default.jpg</file>
+        <file>resources/webcam_frame_default.jpg</file>
+        <file>resources/recognition_face_default.jpg</file>
+    </qresource>
+</RCC>
